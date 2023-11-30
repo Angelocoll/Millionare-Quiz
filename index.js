@@ -5,40 +5,41 @@ let Quiz = [
     Svar: "Law Abiding Citizen",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "När föddes World wide web fram?",
+    Svar: "År 1983",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Vad är de för medel man sätter på GPU:et?",
+    Svar: "Kylpasta",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Vem är grundaren till spotify?",
+    Svar: "Daniel Ek",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Hur många registrerade invånare har sverige idags läget?",
+    Svar: "10,42 Miljonär",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Vad användes Nackademin byggnaden till när den byggdes?",
+    Svar: "SJ Kontor",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Vilket år grundades Nackademin?",
+    Svar: "År 1994",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga:
+      "Om du har två sandhögar och sedan slår ihop dom hur många sandhögar har du nu?",
+    Svar: "1",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Hur lång är Angelo?",
+    Svar: "210cm",
   },
   {
-    Fråga: "",
-    Svar: "",
+    Fråga: "Vem vann mr olympia 2023?",
+    Svar: "Derek Lunsford",
   },
 ];
 
@@ -51,15 +52,28 @@ let FrågaTwo = document.querySelector("#Fråga2");
 let FrågaTre = document.querySelector("#Fråga3");
 let FrågaFour = document.querySelector("#Fråga4");
 let h2 = document.querySelector("h2");
+let NuvarandeIndex = 0;
 //skapar variabels som kan besvara data för hur många rätt och fel svar man haft under quizens gång
-let RättSvar;
-let FelSvar;
+let RättSvar = 0;
+let FelSvar = 0;
 //skapar en variabel för prispotten och en function som gångrar den med 10 när de anropas som den kommer göra vid rätt svar
 let PrizePot = 1;
 //gångra och tilldela prizepot talet
 function multiplyByTen() {
   PrizePot *= 10;
   return PrizePot;
+}
+
+function showNextQuestion() {
+  if (currentQuestionIndex < Quiz.length) {
+    let Nuvarande = Quiz[NuvarandeIndex];
+    let h1 = document.querySelector("h1");
+    // Visa frågan på skärmen (t.ex. FrågaOne.innerText = currentQuestion.Fråga;)
+    NuvarandeIndex++;
+  } else {
+    // Visa resultatet när alla frågor har besvarats
+    // T.ex. h2.innerHTML = `Rätt svar: ${correctAnswers}, Fel svar: ${wrongAnswers}`;
+  }
 }
 
 //start knappen som sätter igång quizet och skapar layouten

@@ -129,4 +129,9 @@ div button{
 div button:hover{
     cursor: pointer;
 }
+h1{
+    position: absolute;
+    background: black;
+    font-size: 2rem;
+}
 

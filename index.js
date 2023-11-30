@@ -1,3 +1,47 @@
+//skapar en array med olika objekt varje objekt har 2 key med en fråga och ett svar
+let Quiz = [
+  {
+    Fråga: "Vilken Film har inte Leonardo Dicaprio deltagit i?",
+    Svar: "Law Abiding Citizen",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+  {
+    Fråga: "",
+    Svar: "",
+  },
+];
+
 //hittar alla html element som behövs
 let StartBtn = document.querySelector("button");
 let ContentDiv = document.querySelector("#Content");
@@ -18,6 +62,7 @@ function multiplyByTen() {
   return PrizePot;
 }
 
+//start knappen som sätter igång quizet och skapar layouten
 StartBtn.addEventListener("click", () => {
   //tilldelar alla divar classer för styling
   ContentDiv.classList.add("Content");
@@ -37,6 +82,7 @@ StartBtn.addEventListener("click", () => {
     FrågaTwo.classList.remove("Fråga");
     FrågaTre.classList.remove("Fråga");
     FrågaFour.classList.remove("Fråga");
+    CloseBtn.remove();
     h2.innerHTML = ``;
   });
   //sätter h2 till prizepot som just nu är 1 men gångrar med 10 för varje rätt svar

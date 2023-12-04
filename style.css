@@ -5,28 +5,38 @@ margin: 0;
 }
 header{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-end;
     flex-direction: column;
+    text-align: center;
+    height: 10rem;
+   
 }
-header div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-    overflow: hidden;
-    margin-top: 4rem;
-    
-}
-img{
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 4%;
-}
+
 body{
     background-color: #0a2848;
     color: floralwhite;
+}
+.Light-Mode{
+    background-color: floralwhite;
+    color: #0a2848;
+}
+#start.Light-Mode-Btn{
+    color: white;
+    background: rgb(0, 0, 0);
+}
+#start.Light-Mode-Btn::before{
+    background: rgb(0, 0, 0);
+}
+h1.Light-Mode{
+background-color: white;
+}
+.Content.Light-Mode{
+    background-color: rgb(255, 255, 255);
+
+}
+.Content .Fråga.Light-Mode{
+    border-color: black;
 }
 
 #start{
@@ -76,7 +86,7 @@ main{
 .Content{
     transition: 1s ease;
     position: absolute;
-    height: 40rem;
+    height: 45rem;
     width: 50rem;
     background: rgb(1, 11, 50);
     z-index: 2;
@@ -86,32 +96,38 @@ main{
     justify-content: space-around;
     align-items: center;
     box-shadow: 15px 15px 10px rgba(0, 0, 0, 0.4);
+    flex-direction: column;
 }
-.MoneyDiv{
+.Content div{
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+width: 100%;
+align-items: center;
+}
+.Content .MoneyDiv{
     transition: 1s ease;
     background: rgb(140, 140, 51);
     height: 6rem;
     width: 28rem;
     border-radius: 40%;
     font-size: 2.8rem;
-    position: absolute;
-    top: 2rem;
     text-align: center;
 }
-.Fråga{
+.Content .Fråga{
     transition: 1s ease;
     border: solid 1px white;
     background: rgba(255, 255, 255, 0.038);
     height: 6rem;
-    width: 17rem;
+    width: 40%;
     border-radius: 40%;
     font-size: 2.8rem;
     text-align: center;
-    margin-top: 8rem;
+    
 
 
 }
-div button{
+#CloseBtn{
     background-color: rgb(255, 69, 69);
     position: absolute;
     top: 0;
@@ -126,12 +142,40 @@ div button{
     border: solid black 2px;
     transition: all 1s ease;
 }
+div button{
+    height: 2rem;
+    width: 8rem;
+    border: none;
+    background-color: rgb(35, 231, 0);
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
 div button:hover{
     cursor: pointer;
 }
 h1{
-    position: absolute;
-    background: black;
-    font-size: 2rem;
+    font-size: 2rem; 
 }
+#Light{
+border-radius: 50%;
+height: 4rem;
+width: 4rem;
+border: solid black 3px;
+background: linear-gradient(to right,black 50%, white 50%);
+}
+#Light:hover{
+    cursor: pointer;
+}
+#Light.Mode{
+    background: linear-gradient(to right,rgb(255, 255, 255) 50%, rgb(0, 0, 0) 50%);
+    
 
+}
+label{
+    font-size: 1rem;
+}
+input{
+    margin-right: 1rem;
+}

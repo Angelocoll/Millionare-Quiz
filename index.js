@@ -103,15 +103,15 @@ function multiplyByTen() {
 //skapar en function
 function showNextQuestion() {
   //om quiz längden är större än nuvarandeindex
-  if (NuvarandeIndex < Quiz.length) {
-    let Nuvarande = Quiz[NuvarandeIndex];
+  NuvarandeIndex++;
+  if (NuvarandeIndex < 10) {
     //visar nuvarande frågan och går uppåt varje gång functionen kallas på lägger frågan i h1 som är osynlig på skärmen tills värdet tilldelas till den
+    let Nuvarande = Quiz[NuvarandeIndex];
     h1.innerText = Nuvarande.Fråga;
-    NuvarandeIndex++;
     //om de inte finns några frågor kvar
   } else {
     //sätt h2 innertext till hur många rätt och fel svar man haft under spelets gång
-    h2.innerHTML = `Rätt svar: ${correctAnswers}, Fel svar: ${wrongAnswers}`;
+    h1.innerHTML = `Rätt svar: ${RättSvar}, Fel svar: ${FelSvar}`;
   }
 }
 //skapar en function för att visa första frågan när start knappen klickas
@@ -120,6 +120,27 @@ function ShowQuestion() {
   let Nuvarande = Quiz[NuvarandeIndex];
   //tilldela h1 innertext index 0 .fråga
   h1.innerText = Nuvarande.Fråga;
+}
+function closenow() {
+  ContentDiv.classList.remove("Content");
+  MoneyDiv.classList.remove("MoneyDiv");
+  FrågaOne.classList.remove("Fråga");
+  FrågaTwo.classList.remove("Fråga");
+  FrågaTre.classList.remove("Fråga");
+  FrågaFour.classList.remove("Fråga");
+  CloseBtn.remove();
+  h2.innerHTML = ``;
+  h1.innerText = "";
+  NuvarandeIndex = 0;
+  FelSvar = 0;
+  RättSvar = 0;
+  PrizePot = 1;
+  let SvarBtn = document.querySelector("#SvarDiv button");
+  SvarBtn.remove();
+  FrågaOne.innerHTML = "";
+  FrågaTwo.innerHTML = "";
+  FrågaTre.innerHTML = "";
+  FrågaFour.innerHTML = "";
 }
 //skapar en function för close knappen
 function close() {
@@ -167,25 +188,27 @@ function layout() {
   FrågaFour.classList.add("Fråga");
 }
 function Checkbox() {
-  let obj = Quiz[NuvarandeIndex];
-  let alt1 = obj.alternativ1;
-  let alt2 = obj.alternativ2;
-  let alt3 = obj.alternativ3;
-  let alt4 = obj.alternativ4;
-  let altall = [alt1, alt2, alt3, alt4];
-  let Divs = [FrågaOne, FrågaTwo, FrågaTre, FrågaFour];
+  if (NuvarandeIndex < 10) {
+    let obj = Quiz[NuvarandeIndex];
+    let alt1 = obj.alternativ1;
+    let alt2 = obj.alternativ2;
+    let alt3 = obj.alternativ3;
+    let alt4 = obj.alternativ4;
+    let altall = [alt1, alt2, alt3, alt4];
+    let Divs = [FrågaOne, FrågaTwo, FrågaTre, FrågaFour];
 
-  altall.forEach((alt, index) => {
-    let input = document.createElement("input");
-    input.type = "checkbox";
-    input.value = alt;
+    altall.forEach((alt, index) => {
+      let input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = alt;
 
-    let label = document.createElement("label");
-    label.innerHTML = `${alt}`;
-    label.prepend(input);
+      let label = document.createElement("label");
+      label.innerHTML = `${alt}`;
+      label.prepend(input);
 
-    Divs[index].append(label);
-  });
+      Divs[index].append(label);
+    });
+  }
 }
 
 //kortat ned själva koden med functioner utifrån man kallar på
@@ -196,13 +219,13 @@ StartBtn.addEventListener("click", () => {
   //close tar bort klasser från divar
   close();
   //sätter h2 till prizepot som just nu är 1 men gångrar med 10 för varje rätt svar
-  h2.innerHTML = `--$${PrizePot}--`;
+  h2.innerHTML = `$${PrizePot}`;
   //skapar en layout med inputs och labels utifrån min array
   Checkbox();
   //showqustion visar frågan med index platsen 0
-  showNextQuestion();
-  //är min svar knapp den som kollar om nåt stämmer sätt ett poäng i rättasvar annars i felsvar och sedan gå vidare till nästa fråga
   Svar();
+  ShowQuestion();
+  //är min svar knapp den som kollar om nåt stämmer sätt ett poäng i rättasvar annars i felsvar och sedan gå vidare till nästa fråga
 });
 
 //skapar en function för svarabtn
@@ -212,23 +235,29 @@ function Svar() {
   SvarDiv.append(SvarBtn);
 
   SvarBtn.addEventListener("click", () => {
-    let AllInputs = document.querySelectorAll("input:checked");
-    let obj = Quiz[NuvarandeIndex];
-    let rätt1 = obj.Svar;
-    let rätt2 = obj.svar;
-    if (AllInputs.length > 1) {
-      if (AllInputs[0].value === rätt1 && AllInputs[1].value === rätt2) {
-        RättSvar++;
+    if (NuvarandeIndex < 10) {
+      console.log(NuvarandeIndex);
+      let AllInputs = document.querySelectorAll("input:checked");
+      let obj = Quiz[NuvarandeIndex];
+      let rätt1 = obj.Svar;
+      let rätt2 = obj.svar;
+      if (AllInputs.length > 1) {
+        if (AllInputs[0].value === rätt1 && AllInputs[1].value === rätt2) {
+          RättSvar++;
+        } else {
+          FelSvar++;
+        }
       } else {
         FelSvar++;
       }
+      nollställ();
+      showNextQuestion();
+      Checkbox();
+      multiplyByTen();
+      h2.innerHTML = `$${PrizePot}`;
     } else {
-      FelSvar++;
+      closenow();
+      console.log("hej");
     }
-    nollställ();
-    Checkbox();
-    showNextQuestion();
-    multiplyByTen();
-    h2.innerHTML = `--$${PrizePot}--`;
   });
 }

@@ -150,6 +150,10 @@ div button{
     border-radius: 1rem;
     font-size: 0.9rem;
     font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+div button:last-child{
+    background-color: red;
 }
 
 div button:hover{
@@ -178,4 +182,28 @@ label{
 }
 input{
     margin-right: 1rem;
+}
+#röd{
+    color: red;
+}
+#gul{
+    color: rgb(217, 255, 0);
+}
+#grön{
+    color: rgb(60, 255, 0);
+}
+#SvarDiv{
+    flex-direction: column;
+}
+li{
+    margin-bottom: 1rem;
+}
+ul{
+    margin-top: 1rem;
+}
+#rättSvar{
+    background-color: green;
+}
+#felSvar{
+    background-color: red;
 }

@@ -206,8 +206,7 @@ function Score() {
         let li = document.createElement("li");
         li.innerHTML = `<span id="rättSvar">Fråga:${obj.Indexet} ${obj.Frågan}. Du svarade: ${obj.DittSvar}, Rätt svar är: ${obj.rättsvar}</span>`;
         ul.append(li);
-      }
-      if (booleanValue === obj.rättsvar) {
+      } else if (booleanValue === obj.rättsvar) {
         let li = document.createElement("li");
         li.innerHTML = `<span id="rättSvar">Fråga:${obj.Indexet} ${obj.Frågan}. Du svarade: ${obj.DittSvar}, Rätt svar är: ${obj.rättsvar}</span>`;
         ul.append(li);
@@ -440,7 +439,6 @@ function Svar() {
           let booleanValue = selectedValue === "true";
           if (booleanValue === rätt1) {
             RättSvar++;
-            console.log(RättSvar);
             multiplyByTen();
           } else {
             FelSvar++;

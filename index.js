@@ -96,6 +96,7 @@ let FrågaFour = document.querySelector("#Fråga4");
 let SvarDiv = document.querySelector("#SvarDiv");
 let h2 = document.querySelector("h2");
 let h1 = document.querySelector("h1");
+let h3 = document.querySelector("h3");
 //skapar en variabel som håller räkningen på vilken fråga man är på
 let NuvarandeIndex = 0;
 
@@ -120,6 +121,29 @@ LightMode.addEventListener("click", () => {
 function multiplyByTen() {
   PrizePot *= 10;
   return PrizePot;
+}
+//skapar en timer funktion stackoverflow
+let timeLeft = 30;
+let timerId;
+
+function startTimer() {
+  timeLeft = 30; // Återställ tiden till 30 sekunder
+  clearInterval(timerId); // Rensa tidigare intervall (om det finns)
+  timerId = setInterval(räknaNed, 1000); // Starta ny räkning
+
+  function räknaNed() {
+    if (timeLeft === 0) {
+      clearInterval(timerId);
+      PushSvar();
+      nollställ();
+      showNextQuestion();
+      Checkbox(); // eller Radio() eller annan valfrihetsfunktion
+      startTimer();
+    } else {
+      h3.innerHTML = timeLeft;
+      timeLeft--;
+    }
+  }
 }
 //skapar en function
 function showNextQuestion() {
@@ -198,14 +222,25 @@ function Score() {
     FrågaFour.classList.remove("Fråga");
     h2.innerHTML = ``;
     h1.innerText = "";
+    //stanna timern och sedan nollställ h3 så får man bort timern om du bara nollställer h3 tar du endast bort nuvarande värdet av variabeln men efetr 1 sekun har den ett nytt värde
+    clearInterval(timerId);
+    h3.innerHTML = "";
     SvarDiv.innerHTML = "";
     nollställ();
     ValdaAlternativ.forEach((obj) => {
+      //omvandlar en boolean till string
       let booleanValue = obj.DittSvar === "true";
-      if (obj.DittSvar === obj.rättsvar) {
+      // Kolla om användaren har svarat på frågan, om inte, behandla som fel svar
+      if (obj.DittSvar === undefined && typeof obj.rättsvar === "boolean") {
+        let li = document.createElement("li");
+        li.innerHTML = `<span id="felSvar">Fråga:${obj.Indexet} ${obj.Frågan}. Du svarade inte. Rätt svar är: ${obj.rättsvar}</span>`;
+        ul.append(li);
+        //kollar om användaren har svarat rätt isåfall fall är de rätt svar
+      } else if (obj.DittSvar === obj.rättsvar) {
         let li = document.createElement("li");
         li.innerHTML = `<span id="rättSvar">Fråga:${obj.Indexet} ${obj.Frågan}. Du svarade: ${obj.DittSvar}, Rätt svar är: ${obj.rättsvar}</span>`;
         ul.append(li);
+        //kollar om användaren har svarat rätt med boolean tidigare kod stycke fångar inte boolean värde för då är dittsvar en boolean och rättsvar är en string
       } else if (booleanValue === obj.rättsvar) {
         let li = document.createElement("li");
         li.innerHTML = `<span id="rättSvar">Fråga:${obj.Indexet} ${obj.Frågan}. Du svarade: ${obj.DittSvar}, Rätt svar är: ${obj.rättsvar}</span>`;
@@ -218,6 +253,7 @@ function Score() {
     });
   });
 }
+//closenow är en funktion som är lite upprepade till close knappen förutom att med denna funktion kan jag kalla på den för att stänga ned allt utan att behöva klicka på knappen
 function closenow() {
   ContentDiv.classList.remove("Content");
   MoneyDiv.classList.remove("MoneyDiv");
@@ -226,10 +262,11 @@ function closenow() {
   FrågaTre.classList.remove("Fråga");
   FrågaFour.classList.remove("Fråga");
   CloseBtn.remove();
-  ScoreBtn.remove();
   ul.innerHTML = "";
   h2.innerHTML = ``;
   h1.innerText = "";
+  clearInterval(timerId);
+  h3.innerHTML = "";
   NuvarandeIndex = 0;
   FelSvar = 0;
   RättSvar = 0;
@@ -255,6 +292,8 @@ function close() {
     CloseBtn.remove();
     h2.innerHTML = ``;
     h1.innerText = "";
+    clearInterval(timerId);
+    h3.innerHTML = "";
     NuvarandeIndex = 0;
     FelSvar = 0;
     RättSvar = 0;
@@ -268,6 +307,7 @@ function close() {
     ValdaAlternativ = [];
   });
 }
+//funktionen nollställer endast frågedivsen
 function nollställ() {
   FrågaOne.innerHTML = "";
   FrågaTwo.innerHTML = "";
@@ -358,6 +398,7 @@ function TrueOrFalse() {
 //start knappen som sätter igång quizet och skapar layouten
 //behöver kalla på allt i rätt ordning så att nuvarande index inte hoppar förbi
 StartBtn.addEventListener("click", () => {
+  startTimer();
   //layout tilldelar classer till divar
   layout();
   //close tar bort klasser från divar
@@ -380,6 +421,8 @@ function Svar() {
   SvarDiv.append(SvarBtn);
 
   SvarBtn.addEventListener("click", () => {
+    clearInterval(timerId);
+    startTimer();
     //om nuvarande index är mindre än 10 kör denna
     if (NuvarandeIndex < 10) {
       let AllInputs = document.querySelectorAll("input:checked");

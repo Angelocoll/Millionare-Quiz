@@ -84,7 +84,7 @@ let Quiz = [
 let ValdaAlternativ = [];
 
 //hittar alla html element som behövs
-let ul = document.querySelector("ul");
+//let ul = document.querySelector("ul");
 let StartBtn = document.querySelector("#start");
 let LightMode = document.querySelector("#Light");
 let ContentDiv = document.querySelector("#Content");
@@ -158,7 +158,8 @@ function showNextQuestion() {
     //om de inte finns några frågor kvar
     //annars skriv ut resultatet
   } else {
-    //skapa en div under allt annat och skriv ut dina svar samt index platsen i en ul
+    clearInterval(timerId);
+    h3.innerHTML = "";
 
     //sätt h2 innertext till hur många rätt och fel svar man haft under spelets gång
     //om rätt svar är mindre än 5 gör den röd
@@ -307,6 +308,7 @@ function close() {
     ValdaAlternativ = [];
   });
 }
+let ul = document.createElement("ul");
 //funktionen nollställer endast frågedivsen
 function nollställ() {
   FrågaOne.innerHTML = "";
@@ -316,6 +318,7 @@ function nollställ() {
 }
 //skapar en function för att alla divar ska bli tilldelade klasser när knappen startar
 function layout() {
+  ContentDiv.prepend(ul);
   //tilldelar alla divar classer för styling
   ContentDiv.classList.add("Content");
   MoneyDiv.classList.add("MoneyDiv");

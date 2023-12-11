@@ -197,9 +197,13 @@ input{
 }
 li{
     margin-bottom: 1rem;
+    font-size: 1.3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
 }
 ul{
     margin-top: 1rem;
+    list-style: none;
 }
 #rättSvar{
     background-color: green;
@@ -210,4 +214,8 @@ ul{
 h3{
     color: rgb(255, 64, 64);
     font-size: 2rem;
+}
+.Answer{
+    padding-left: 3rem;
+    padding-right: 3rem;
 }

@@ -398,13 +398,11 @@ StartBtn.addEventListener("click", () => {
   Score();
   ShowQuestion();
 });
-
 //skapar en function för svarabtn
 function Svar() {
   let SvarBtn = document.createElement("button");
   SvarBtn.innerText = "Lås in Svaret";
   SvarDiv.append(SvarBtn);
-
   SvarBtn.addEventListener("click", () => {
     clearInterval(timerId);
     startTimer();

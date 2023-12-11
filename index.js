@@ -16,8 +16,8 @@ let Quiz = [
     svar: "for(let i = 0; i < array.length; i++)",
     alternativ1: "foreach()",
     alternativ2: "array.from()",
-    alternativ3: "for(let i = 0; i < array.length; i++)",
-    alternativ4: "for(let i = 0; i < array.lenght; i++)",
+    alternativ3: "for(let i = 0; i < array.lenght; i++)",
+    alternativ4: "for(let i = 0; i < array.length; i++)",
   },
   {
     Fråga: "Vilka Är grundarna till spotify?",
@@ -82,7 +82,6 @@ let Quiz = [
 ];
 //skapar en array där man pushar in allt man sedan vill dra ut till resultatet samt nuvarande indexet
 let ValdaAlternativ = [];
-
 //hittar alla html element som behövs
 //let ul = document.querySelector("ul");
 let StartBtn = document.querySelector("#start");
@@ -99,7 +98,6 @@ let h1 = document.querySelector("h1");
 let h3 = document.querySelector("h3");
 //skapar en variabel som håller räkningen på vilken fråga man är på
 let NuvarandeIndex = 0;
-
 //skapar variabels som kan besvara data för hur många rätt och fel svar man haft under quizens gång
 let RättSvar = 0;
 let FelSvar = 0;
@@ -123,22 +121,24 @@ function multiplyByTen() {
   return PrizePot;
 }
 //skapar en timer funktion stackoverflow
-let timeLeft = 30;
+let timeLeft = 10;
 let timerId;
-
 function startTimer() {
-  timeLeft = 30; // Återställ tiden till 30 sekunder
-  clearInterval(timerId); // Rensa tidigare intervall (om det finns)
-  timerId = setInterval(räknaNed, 1000); // Starta ny räkning
-
+  timeLeft = 10; // Återställ tiden till 10 sekunder
+  clearInterval(timerId); // Rensa tidigare intervall
+  //1000 milisekunder är en riktig sekund men de ser otroligt långsamt ut så vi kör 900 som ger en bättre känsla
+  timerId = setInterval(räknaNed, 900); // Starta ny räkning
   function räknaNed() {
     if (timeLeft === 0) {
       clearInterval(timerId);
       PushSvar();
       nollställ();
       showNextQuestion();
-      Checkbox(); // eller Radio() eller annan valfrihetsfunktion
-      startTimer();
+      if (NuvarandeIndex < 10) {
+        altLayout();
+        startTimer();
+      } else {
+      }
     } else {
       h3.innerHTML = timeLeft;
       timeLeft--;
@@ -160,7 +160,6 @@ function showNextQuestion() {
   } else {
     clearInterval(timerId);
     h3.innerHTML = "";
-
     //sätt h2 innertext till hur många rätt och fel svar man haft under spelets gång
     //om rätt svar är mindre än 5 gör den röd
     if (RättSvar < 5) {
@@ -187,13 +186,30 @@ function PushSvar() {
   let Nuvarande = Quiz[NuvarandeIndex];
   let rätt1 = Nuvarande.Svar;
   let rätt2 = Nuvarande.svar;
-  if (AllInputs.length > 1) {
-    ValdaAlternativ.push({
-      DittSvar: AllInputs[0].value + ", " + AllInputs[1].value,
-      Indexet: NuvarandeIndex + 1,
-      Frågan: Nuvarande.Fråga,
-      rättsvar: rätt1 + ", " + rätt2,
-    });
+  if (NuvarandeIndex < 3) {
+    if (AllInputs.length > 1) {
+      ValdaAlternativ.push({
+        DittSvar: AllInputs[0].value + ", " + AllInputs[1].value,
+        Indexet: NuvarandeIndex + 1,
+        Frågan: Nuvarande.Fråga,
+        rättsvar: rätt1 + ", " + rätt2,
+      });
+    } else {
+      if (AllInputs.length > 0) {
+        ValdaAlternativ.push({
+          DittSvar: AllInputs[0].value,
+          Indexet: NuvarandeIndex + 1,
+          Frågan: Nuvarande.Fråga,
+          rättsvar: rätt2 + ", " + rätt1,
+        });
+      } else {
+        ValdaAlternativ.push({
+          Indexet: NuvarandeIndex + 1,
+          Frågan: Nuvarande.Fråga,
+          rättsvar: rätt2 + ", " + rätt1,
+        });
+      }
+    }
   } else if (AllInputs.length > 0) {
     ValdaAlternativ.push({
       DittSvar: AllInputs[0].value,
@@ -252,6 +268,15 @@ function Score() {
         ul.append(li);
       }
     });
+    if (RättSvar < 5) {
+      h1.innerHTML = `Resultat: <span id="röd">${RättSvar}0% -Underkänd</span>`;
+      //om rätt svar är mindre än 8 gör den gul
+    } else if (RättSvar < 8) {
+      h1.innerHTML = `Resultat: <span id="gul">${RättSvar}0% -Bra</span>`;
+      //annars gör den grön
+    } else {
+      h1.innerHTML = `Resultat: <span id="grön">${RättSvar}0% -Riktigt bra jobbat</span>`;
+    }
   });
 }
 //closenow är en funktion som är lite upprepade till close knappen förutom att med denna funktion kan jag kalla på den för att stänga ned allt utan att behöva klicka på knappen
@@ -264,6 +289,7 @@ function closenow() {
   FrågaFour.classList.remove("Fråga");
   CloseBtn.remove();
   ul.innerHTML = "";
+  ul.remove();
   h2.innerHTML = ``;
   h1.innerText = "";
   clearInterval(timerId);
@@ -305,6 +331,7 @@ function close() {
     FrågaFour.innerHTML = "";
     SvarDiv.innerHTML = "";
     ul.innerHTML = "";
+    ul.remove();
     ValdaAlternativ = [];
   });
 }
@@ -327,94 +354,49 @@ function layout() {
   FrågaTre.classList.add("Fråga");
   FrågaFour.classList.add("Fråga");
 }
-//skapar en function för checkboxar med 4 alternativa svar loopar igenom varje svar och varje div och skapar en input för varje placerar ut en i varje div
-function Checkbox() {
+function altLayout() {
+  // Definiera altall, divs
+  let altall;
+  let Divs;
   if (NuvarandeIndex < 10) {
-    let obj = Quiz[NuvarandeIndex];
-    let alt1 = obj.alternativ1;
-    let alt2 = obj.alternativ2;
-    let alt3 = obj.alternativ3;
-    let alt4 = obj.alternativ4;
-    let altall = [alt1, alt2, alt3, alt4];
-    let Divs = [FrågaOne, FrågaTwo, FrågaTre, FrågaFour];
-
+    if (NuvarandeIndex > 7 && NuvarandeIndex < 10) {
+      altall = [false, true];
+      Divs = [FrågaOne, FrågaTwo];
+    } else if (NuvarandeIndex < 10) {
+      let obj = Quiz[NuvarandeIndex];
+      let alt1 = obj.alternativ1;
+      let alt2 = obj.alternativ2;
+      let alt3 = obj.alternativ3;
+      let alt4 = obj.alternativ4;
+      altall = [alt1, alt2, alt3, alt4];
+      Divs = [FrågaOne, FrågaTwo, FrågaTre, FrågaFour];
+    }
     altall.forEach((alt, index) => {
       let input = document.createElement("input");
-      input.type = "checkbox";
+      if (NuvarandeIndex < 3) {
+        input.type = "checkbox";
+      } else if (NuvarandeIndex < 10) {
+        input.type = "radio";
+        input.name = "Qustions";
+      }
       input.value = alt;
-
       let label = document.createElement("label");
       label.innerHTML = `${alt}`;
       label.prepend(input);
-
       Divs[index].append(label);
     });
   }
 }
-//function för radiobtn liknade till checkbox men här finns de bara ett rätt svar och vi skapar en radio btn för varje alternativ tilldelar den ett name så att man endast kan välja ett val
-function Radio() {
-  if (NuvarandeIndex < 10) {
-    let obj = Quiz[NuvarandeIndex];
-    let alt1 = obj.alternativ1;
-    let alt2 = obj.alternativ2;
-    let alt3 = obj.alternativ3;
-    let alt4 = obj.alternativ4;
-    let altall = [alt1, alt2, alt3, alt4];
-    let Divs = [FrågaOne, FrågaTwo, FrågaTre, FrågaFour];
-
-    altall.forEach((alt, index) => {
-      let input = document.createElement("input");
-      input.type = "radio";
-      input.value = alt;
-      input.name = "Qustions";
-
-      let label = document.createElement("label");
-      label.innerHTML = `${alt}`;
-      label.prepend(input);
-
-      Divs[index].append(label);
-    });
-  }
-}
-//function för true or false liknade till checkbox och radio men enklare
-function TrueOrFalse() {
-  if (NuvarandeIndex < 10) {
-    let altall = [false, true];
-    let Divs = [FrågaOne, FrågaTwo];
-
-    altall.forEach((alt, index) => {
-      let input = document.createElement("input");
-      input.type = "radio";
-      input.value = alt;
-      input.name = "Qustions";
-
-      let label = document.createElement("label");
-      label.innerHTML = `${alt}`;
-      label.prepend(input);
-
-      Divs[index].append(label);
-    });
-  }
-}
-
-//kortat ned själva koden med functioner utifrån man kallar på
 //start knappen som sätter igång quizet och skapar layouten
-//behöver kalla på allt i rätt ordning så att nuvarande index inte hoppar förbi
 StartBtn.addEventListener("click", () => {
   startTimer();
-  //layout tilldelar classer till divar
   layout();
-  //close tar bort klasser från divar
   close();
-  //sätter h2 till prizepot som just nu är 1 men gångrar med 10 för varje rätt svar
   h2.innerHTML = `$${PrizePot}`;
-  //skapar en layout med inputs och labels utifrån min array
-  Checkbox();
-  //showqustion visar frågan med index platsen 0
+  altLayout();
   Svar();
   Score();
   ShowQuestion();
-  //är min svar knapp den som kollar om nåt stämmer sätt ett poäng i rättasvar annars i felsvar och sedan gå vidare till nästa fråga
 });
 
 //skapar en function för svarabtn
@@ -433,7 +415,7 @@ function Svar() {
       let rätt1 = obj.Svar;
       let rätt2 = obj.svar;
       //om nuvarand eindex är mindre än 3 leta efter 2 matchade svar och 2 checkboxar som matchar
-      if (NuvarandeIndex < 2) {
+      if (NuvarandeIndex < 3) {
         if (AllInputs.length > 1) {
           if (AllInputs[0].value === rätt1 && AllInputs[1].value === rätt2) {
             RättSvar++;
@@ -450,7 +432,7 @@ function Svar() {
         PushSvar();
         nollställ();
         showNextQuestion();
-        Checkbox();
+        altLayout();
         //om nuvarande index är mindre än 8 leta efter 1 checkbox som är i checkad samt 1 rätt svar som matchar
       } else if (NuvarandeIndex < 7) {
         if (AllInputs.length > 0) {
@@ -466,7 +448,7 @@ function Svar() {
         PushSvar();
         nollställ();
         showNextQuestion();
-        Radio();
+        altLayout();
       } else {
         if (AllInputs.length > 0) {
           if (AllInputs.length > 0) {
@@ -495,7 +477,7 @@ function Svar() {
         PushSvar();
         nollställ();
         showNextQuestion();
-        TrueOrFalse();
+        altLayout();
       }
       h2.innerHTML = `$${PrizePot}`;
     } else {
